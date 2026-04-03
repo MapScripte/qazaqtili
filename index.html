@@ -1,0 +1,485 @@
+<!DOCTYPE html>
+<html lang="kk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Қазақ тілі Ашық Сабағы | Бижанова Ж.А. </title>
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;700&display=swap');
+
+        :root {
+            --neon-blue: #00eaff;
+            --neon-purple: #bc13fe;
+            --gold: #ffdf00;
+            --bg-dark: #02040a;
+            --glass: rgba(255, 255, 255, 0.05);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body, html {
+            height: 100%;
+            font-family: 'Montserrat', sans-serif;
+            color: white;
+            overflow-x: hidden;
+            /* ФОНҒА АСПАН ӘЛЕМІН БІЛДІРЕТІН СУРЕТ - Radial Gradient арқылы ғарыш стилін жасау */
+            background: radial-gradient(circle at center, #0f172a 0%, #01030a 100%);
+            background-attachment: fixed;
+        }
+
+        /* Динамикалық жұлдыздар (фон үшін) */
+        #universe-bg {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            z-index: -1;
+        }
+
+        .background-star {
+            position: absolute;
+            background: white;
+            border-radius: 50%;
+            opacity: 0.1;
+            animation: twinkle var(--duration) infinite ease-in-out;
+        }
+
+        @keyframes twinkle {
+            0%, 100% { opacity: 0.2; transform: scale(1); }
+            50% { opacity: 1; transform: scale(1.3); box-shadow: 0 0 10px white; }
+        }
+
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* Header & Footer */
+        header, footer {
+            padding: 15px;
+            text-align: center;
+            background: rgba(0, 0, 0, 0.7);
+            border-bottom: 1px solid var(--neon-blue);
+            color: var(--neon-blue);
+            font-weight: bold;
+            letter-spacing: 1px;
+            z-index: 100;
+            position: relative;
+        }
+
+        footer { border-top: 1px solid var(--neon-blue); border-bottom: none; position: fixed; bottom: 0; width: 100%; }
+
+        /* Экрандар жүйесі (SPA) */
+        .screen {
+            display: none;
+            min-height: calc(100vh - 120px);
+            padding: 40px;
+            animation: fadeIn 0.4s ease-out;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .active { display: flex; }
+
+        /* БАСТЫ БЕТ - ИНТЕРАКТИВТІ ПАНЕЛЬ */
+        .dashboard {
+            display: grid;
+            grid-template-columns: 300px 1fr 300px;
+            gap: 40px;
+            width: 100%;
+            align-items: center;
+        }
+
+        /* СОЛ ЖАҚТА - Басқару батырмалары */
+        .nav-panel {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        button {
+            background: transparent;
+            border: 2px solid var(--neon-blue);
+            color: var(--neon-blue);
+            padding: 18px;
+            cursor: pointer;
+            transition: 0.3s;
+            border-radius: 10px;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-family: inherit;
+        }
+
+        button:hover {
+            background: var(--neon-blue);
+            color: black;
+            box-shadow: 0 0 30px var(--neon-blue);
+            transform: scale(1.03);
+        }
+
+        button:active { transform: scale(0.97); }
+
+        /* ОРТАДА - Ақпарат */
+        .center-hero {
+            text-align: center;
+            background: var(--glass);
+            padding: 50px;
+            border-radius: 30px;
+            border: 1px solid rgba(0, 234, 255, 0.2);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            box-shadow: 0 0 50px rgba(0, 0, 0, 0.5);
+        }
+
+        .neon-title {
+            font-size: 3.5rem;
+            margin-bottom: 25px;
+            text-shadow: 0 0 20px var(--neon-blue);
+            background: linear-gradient(to right, #fff, var(--neon-blue), #fff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .center-hero h2 { color: var(--gold); margin-bottom: 10px; font-weight: 300; }
+        .center-hero p { color: #cbd5e1; font-size: 1.1rem; }
+
+        /* ОҢ ЖАҚТА - СІЗ ЖҮКТЕГЕН СУРЕТ */
+        .right-visual {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .teacher-img-container {
+            width: 100%;
+            max-width: 300px;
+            border-radius: 20px;
+            border: 2px solid var(--neon-purple);
+            overflow: hidden;
+            box-shadow: 0 0 40px rgba(188, 19, 254, 0.3);
+            transition: 0.3s;
+        }
+
+        .teacher-img-container:hover { transform: rotate(3deg) scale(1.05); }
+
+        .teacher-img-container img {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        /* КЕРІ ҚАЙТУ БАТЫРМАСЫ */
+        .back-btn {
+            position: absolute;
+            top: 90px;
+            left: 30px;
+            padding: 10px 20px;
+            font-size: 0.8rem;
+            border-color: var(--neon-purple);
+            color: var(--neon-purple);
+        }
+
+        .back-btn:hover {
+            background: var(--neon-purple);
+            color: white;
+            box-shadow: 0 0 30px var(--neon-purple);
+        }
+
+        /* --- БӨЛІМДЕРДІҢ МАЗМҰНЫ --- */
+        .section-content {
+            width: 100%;
+            background: var(--glass);
+            backdrop-filter: blur(15px);
+            border-radius: 30px;
+            padding: 40px;
+            margin-top: 30px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        h2.section-title {
+            font-size: 2.5rem;
+            color: var(--gold);
+            text-align: center;
+            margin-bottom: 30px;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+        }
+
+        /* БЛОК-СПЕЦИФИКАЛЫҚ CSS */
+        /* Психологиялық ахуал */
+        .psycho-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+        }
+
+        .psycho-item {
+            background: rgba(188, 19, 254, 0.1);
+            border: 2px solid var(--neon-purple);
+            padding: 30px;
+            text-align: center;
+            cursor: pointer;
+            border-radius: 15px;
+            transition: 0.3s;
+            font-size: 0.9rem;
+            line-height: 1.4;
+        }
+
+        .psycho-item:hover {
+            background: var(--neon-purple);
+            color: white;
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(188, 19, 254, 0.5);
+        }
+
+        /* Топқа бөлу */
+        .team-container {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 30px;
+            margin-top: 30px;
+        }
+
+        .team-card {
+            background: rgba(0, 0, 0, 0.3);
+            border: 2px solid var(--neon-blue);
+            padding: 25px;
+            border-radius: 20px;
+            animation: fadeInUp 0.5s ease forwards;
+        }
+
+        @keyframes fadeInUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+
+        .team-card h3 { color: var(--gold); text-align: center; margin-bottom: 15px; text-transform: uppercase; }
+        .team-card hr { border-color: rgba(0, 234, 255, 0.3); margin-bottom: 15px; }
+        .team-card p { padding: 10px; border-bottom: 1px solid rgba(255,255,255,0.05); cursor: pointer; transition: 0.2s; }
+        .team-card p:hover { background: rgba(0, 234, 255, 0.1); color: var(--neon-blue); padding-left: 15px; }
+
+        .start-team-btn {
+            display: block;
+            margin: 0 auto;
+            padding: 20px 50px;
+            font-size: 1.2rem;
+            background: var(--gold);
+            color: black;
+            border-color: var(--gold);
+        }
+
+        .start-team-btn:hover {
+            box-shadow: 0 0 40px rgba(255, 223, 0, 0.6);
+            border-color: white;
+        }
+        h4{
+            /* color: #9ab088; */
+            background: linear-gradient(to right, #fff, var(--gold), #fff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-top: 20px;
+            margin-bottom: 20px;  
+        }
+        h5{
+            margin-top: 20px;
+            margin-bottom: 20px;
+        }
+        
+
+    </style>
+</head>
+<body>
+    
+
+
+    <div id="universe-bg"></div>
+
+    <header>
+        Бижанова Ж.А. | ҚАЗАҚ ТІЛІ | ҚАЗАҚ ТІЛІ ПӘНІ ОҚЫТУШЫСЫ
+    </header>
+
+    <div id="app">
+        <section id="main-screen" class="screen active">
+            <div class="dashboard">
+                <div class="nav-panel">
+                     <a href="1 психологиялық ахуал.html"><button>1. Психологиялық ахуал ✨</button></a>
+                    <a href="2 топқа бөлу.html"><button>2. Топқа бөлу 🤝</button></a>
+                    <a href="өткен тақырып.html"><button>3.Өткен тақырыпқа шолу 📚</button></a>
+                    <a href="4тақырып ашылуы.html"><button>4. Тақырып ашу 🚀</button></a>
+                    <a href="8 топтық жұмыс.html"><button>5. Топтық жұмыс 🏗️</button></a>
+                    <a href="жеке жұмыс.html"><button>6. Жеке жұмыс 💪</button></a>
+                    <a href="жұптық жұмыс.html"><button>7. Жұптық жұмыс 🤝</button></a>
+                    <a href="бекіту тапсырмасы.html"><button>8. Бекіту сұрақтары 📌</button></a>
+                    <a href="https://kasietova.my.canva.site/c5a93eabevdcyg5n"><button>9. Кері байланыс 🌟</button></a>
+                    <a href="бағалау парағы.html"><button>10. Бағалау 📝</button></a>
+                </div>
+
+                <div class="center-hero">
+                    <h1 class="neon-title">Ашық сабаққа қош келдіңіз!</h1>
+                    <h2>Бижанова Ж.А.</h2>
+                    <p>5-сынып</p>
+                    <h5> <strong><i>Сабақтың мақсаты:</i></strong> <i>Коммуникативтік жағдаятқа сай эмоционалды сөздерді, дауыс ырғақтары арқылы қыстырма, қаратпа, одағай сөздерді еркін қолданып, диалогке даярлықсыз қатысады, өз пікірін білдіре алады. Сан есімнің мағыналық түрлерін ажырата біледі, сан есімді зат есім орнына қолдана алады.</i></h5>
+                    <hr>
+                    <h4>Апта дәйексөзі: Көп еңбек еткенге бақыт басын иеді (Леонардо да Винчи)</h4>
+                </div>
+
+                <div class="right-visual">
+                    <div class="teacher-img-container">
+                        <img src="сурет.png" alt="Informatics Robot Style Image">
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="psycho" class="screen">
+            <button class="back-btn back-to-main" onclick="nav('main-screen')">⬅ КЕРІ ҚАЙТУ</button>
+            <h2 class="section-title">Психологиялық ахуал</h2>
+            <div class="section-content">
+                <div class="psycho-grid" id="psycho-robots">
+                    </div>
+            </div>
+        </section>
+
+        <section id="teams" class="screen">
+            <button class="back-btn back-to-main" onclick="nav('main-screen')">⬅ КЕРІ ҚАЙТУ</button>
+            <h2 class="section-title">Оқушыларды топқа бөлу</h2>
+            <div class="section-content">
+                <button class="start-team-btn" onclick="startTeaming()">ТОПТЫ ТАҢДАУ 🎲</button>
+                <div class="team-container" id="team-list">
+                    </div>
+            </div>
+        </section>
+
+        <section id="intro-topic" class="screen"><button class="back-btn back-to-main" onclick="nav('main-screen')">⬅ КЕРІ ҚАЙТУ</button><h2 class="section-title">Тақырып ашу</h2></section>
+        <section id="new-topic" class="screen"><button class="back-btn back-to-main" onclick="nav('main-screen')">⬅ КЕРІ ҚАЙТУ</button><h2 class="section-title">Жаңа тақырып</h2></section>
+        <section id="solo" class="screen"><button class="back-btn back-to-main" onclick="nav('main-screen')">⬅ КЕРІ ҚАЙТУ</button><h2 class="section-title">Жеке жұмыс</h2></section>
+        <section id="pair" class="screen"><button class="back-btn back-to-main" onclick="nav('main-screen')">⬅ КЕРІ ҚАЙТУ</button><h2 class="section-title">Жұптық жұмыс</h2></section>
+        <section id="group" class="screen"><button class="back-btn back-to-main" onclick="nav('main-screen')">⬅ КЕРІ ҚАЙТУ</button><h2 class="section-title">Топтық жұмыс</h2></section>
+        <section id="feedback" class="screen"><button class="back-btn back-to-main" onclick="nav('main-screen')">⬅ КЕРІ ҚАЙТУ</button><h2 class="section-title">Кері байланыс</h2></section>
+        
+    </div>
+
+    <footer>
+        Қазақ тілі пәні оқытушысы: Бижанова Ж.А. | © 2026 Қазақ тілі
+    </footer>
+
+    <script>
+        // --- ДЕРЕКТЕР КҮТІМІ ---
+
+        // 4-блок: Оқушылар тізімі (автоматты бөлу үшін)
+        const students = [
+            "Әділ", "Айша", "Бекарыс", "Гүлім", "Дамир", "Әділ", "Айша", "Бекарыс", 
+            "Ерсұлтан", "Жансая", "Зере", "Ислам", "Кәусар",  "Ерсұлтан", "Жансая", "Зере", 
+            "Мұрат", "Нұрислам", "Олжас", "Райымбек", "Сабина", "Райымбек", "Сабина"
+        ];
+        
+        // 3-блок: Психологиялық ахуал мәтіндері
+        const psychoTexts = [
+            "Бір-бірімізге қарап күлімсірейміз! 😊",
+            "Бір-бірімізге алғыс айтамыз! 🙏",
+            "Бір-бірімізді құшақтаймыз! 🤗",
+            "Қолымызды көтеріп: «Мен еңбекқормын, менің қолымнан бәрі келеді!» дейміз 💪",
+            "Дауыстап: «Мен үшін әр күн – еңбек пен жетістікке толы!» дейміз! ✨",
+            "«Мен қауіпсіз ортадамын, еңбекті сүйемін және сыныбымды жақсы көремін!» дейміз! ❤️"
+        ];
+
+        // --- SPA ЛОГИКАСЫ (ЭКРАНДАРДЫ АУЫСТЫРУ) ---
+
+        function nav(id) {
+            // Барлық экрандарды жасыру
+            document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+            // Таңдалған экранды көрсету
+            document.getElementById(id).classList.add('active');
+            
+            // Дыбыс эффектісі
+            playClickSound();
+
+            // Әр экранға сәйкес арнайы эффектілер
+            if (id === 'teams') {
+                confetti({ particleCount: 50, spread: 60, origin: { y: 0.7 } });
+            }
+        }
+
+        // --- ДЫБЫС ЖӘНЕ АНИМАЦИЯ ЭФФЕКТІЛЕРІ ---
+
+        // Дыбыс генераторы (басқанда)
+        function playClickSound() {
+            try {
+                const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+                const osc = audioCtx.createOscillator();
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(660, audioCtx.currentTime);
+                osc.frequency.exponentialRampToValueAtTime(330, audioCtx.currentTime + 0.1);
+                const gain = audioCtx.createGain();
+                gain.gain.setValueAtTime(0.1, audioCtx.currentTime);
+                gain.gain.linearRampToValueAtTime(0, audioCtx.currentTime + 0.1);
+                osc.connect(gain); gain.connect(audioCtx.destination);
+                osc.start(); osc.stop(audioCtx.currentTime + 0.1);
+            } catch (e) {
+                console.log("Дыбысты ойнату мүмкін болмады (браузер шектеуі)");
+            }
+        }
+
+        // Фонға жұлдыздар жасау
+        const universe = document.getElementById('universe-bg');
+        for (let i = 0; i < 200; i++) {
+            const star = document.createElement('div');
+            star.className = 'background-star';
+            const size = (Math.random() * 3 + 1) + 'px';
+            star.style.width = size; star.style.height = size;
+            star.style.top = Math.random() * 100 + '%';
+            star.style.left = Math.random() * 100 + '%';
+            star.style.setProperty('--duration', (Math.random() * 3 + 2) + 's');
+            universe.appendChild(star);
+        }
+
+        // --- ФУНКЦИОНАЛДЫ БЛОКТАРДЫ ТОЛТЫРУ ---
+
+        // 3-БЛОК. ПСИХОЛОГИЯЛЫҚ АХУАЛ (Карточкаларды жасау)
+        const psychoGrid = document.getElementById('psycho-robots');
+        psychoTexts.forEach((text, index) => {
+            const div = document.createElement('div');
+            div.className = 'psycho-item';
+            div.innerHTML = `<h3>✨</h3><p>Жұлдыздар және аңыздар №${index + 1}</p>`;
+            div.onclick = () => {
+                // Басқанда мәтінді көрсету
+                div.innerHTML = `<h3>✨</h3><p>${text}</p>`;
+                div.style.background = 'var(--neon-purple)';
+                confetti({ particleCount: 30, colors: ['#bc13fe', '#fff'] });
+                playClickSound(); // Қосымша дыбыс
+            };
+            psychoGrid.appendChild(div);
+        });
+
+        // 4-БЛОК. ТОПҚА БӨЛУ (Логикасы)
+        function startTeaming() {
+            // Кездейсоқ араластыру
+            const shuffled = [...students].sort(() => 0.5 - Math.random());
+            const list = document.getElementById('team-list');
+            list.innerHTML = ''; // Ескі тізімді тазалау
+            
+            // Кері байланыс - фейерверк
+            confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 } });
+
+            // 3 топқа бөлу
+            for (let i = 0; i < 3; i++) {
+                const card = document.createElement('div');
+                card.className = 'team-card';
+                card.innerHTML = `<h3>${i+1}-ТОП</h3><hr>`;
+                
+                shuffled.slice(i*5, (i+1)*5).forEach(studentName => {
+                    const p = document.createElement('p');
+                    p.innerText = studentName;
+                    p.onclick = () => {
+                        alert(`Сәлем, ${studentName}! Сен ${i+1}-топтасың! Сәттілік! 🚀`);
+                        playClickSound();
+                    };
+                    card.appendChild(p);
+                });
+                
+                list.appendChild(card);
+            }
+        }
+
+    </script>
+</body>
+</html>

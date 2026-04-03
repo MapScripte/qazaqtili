@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="kk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Жұптық жұмыс: Жұлдыздар мен Аңыздар</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --space-bg: #0b0d17;
+            --gold: #ffd700;
+            --purple: #6a11cb;
+            --blue: #2575fc;
+            --glass: rgba(255, 255, 255, 0.1);
+        }
+
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background: var(--space-bg);
+            color: white;
+            margin: 0;
+            padding: 0;
+            background-image: 
+                radial-gradient(2px 2px at 20px 30px, #eee, rgba(0,0,0,0)),
+                radial-gradient(2px 2px at 40px 70px, #fff, rgba(0,0,0,0)),
+                radial-gradient(2px 2px at 50px 160px, #ddd, rgba(0,0,0,0));
+            background-repeat: repeat;
+            background-size: 200px 200px;
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 20px;
+            text-align: center;
+        }
+
+        header {
+            padding: 40px 0;
+            border-bottom: 1px solid var(--glass);
+        }
+
+        h1 {
+            color: var(--gold);
+            font-size: 2.5rem;
+            text-shadow: 0 0 15px rgba(255, 215, 0, 0.5);
+            margin-bottom: 10px;
+        }
+
+        .quote-box {
+            background: var(--glass);
+            padding: 20px;
+            border-radius: 15px;
+            margin: 20px 0;
+            font-style: italic;
+            border-left: 5px solid var(--gold);
+        }
+
+        /* Тапсырма таңдау бөлімі */
+        .tabs {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+        }
+
+        .tab-btn {
+            background: var(--glass);
+            border: 1px solid var(--gold);
+            color: white;
+            padding: 12px 25px;
+            cursor: pointer;
+            border-radius: 30px;
+            font-weight: bold;
+            transition: 0.3s;
+        }
+
+        .tab-btn.active, .tab-btn:hover {
+            background: var(--gold);
+            color: black;
+        }
+
+        /* Тапсырма карточкасы */
+        .task-content {
+            display: none;
+            background: linear-gradient(145deg, rgba(106, 17, 203, 0.2), rgba(37, 117, 252, 0.2));
+            padding: 40px;
+            border-radius: 20px;
+            border: 1px solid var(--glass);
+            text-align: left;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .task-content.active {
+            display: block;
+        }
+
+        .task-header {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        .illustration-icon {
+            font-size: 4rem;
+        }
+
+        h2 {
+            color: var(--gold);
+            margin: 0;
+        }
+
+        .requirements {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-top: 30px;
+        }
+
+        .req-item {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 15px;
+            border-radius: 10px;
+            border: 1px dashed var(--gold);
+        }
+
+        .badge {
+            background: var(--gold);
+            color: black;
+            padding: 2px 8px;
+            border-radius: 5px;
+            font-size: 0.8rem;
+            font-weight: bold;
+            margin-right: 5px;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        footer {
+            margin-top: 40px;
+            opacity: 0.6;
+            font-size: 0.9rem;
+        }
+        .back-btn {
+            position: fixed; top: 20px; left: 20px;
+            background-color: #6014ec; color: rgb(240, 239, 239);
+            border: none; padding: 10px 18px;
+            font-size: 14px; border-radius: 10px;
+            cursor: pointer; z-index: 150;
+        }
+    </style>
+</head>
+<body>
+    <button class="back-btn" onclick="history.back()">⬅ Артқа қайту</button>
+
+<div class="container">
+    <header>
+        <h1>🌟 Жұлдыздар мен Аңыздар</h1>
+        <div class="quote-box">
+            "Ақылдасып істелген іс – нәтижелі болады" <br>
+            
+        </div>
+        <p>Жұптық жұмысты орындаңыз:</p>
+    </header>
+
+    <div class="tabs">
+        <button class="tab-btn active" onclick="showTask('option1', this)">1-нұсқа: Ата мен Немере</button>
+        <button class="tab-btn" onclick="showTask('option2', this)">2-нұсқа: Екі Дос</button>
+        <button class="tab-btn" onclick="showTask('option3', this)">3-нұсқа: Ғалым мен Шәкірт</button>
+    </div>
+
+    <div id="option1" class="task-content active">
+        <div class="task-header">
+            <div class="illustration-icon">👴👦</div>
+            <div>
+                <h2>Ата мен немере әңгімесі</h2>
+                <p>Тақырыбы: Жұлдыздар және өмірлік тәрбие</p>
+            </div>
+        </div>
+        <p><strong>Тапсырма сипаттамасы:</strong> Атасы немересіне түнгі аспандағы жұлдыздар туралы аңыз айтып отырып, еңбектің адам өміріндегі маңызы мен тәрбие туралы ақыл қосады.</p>
+        
+        <div class="requirements">
+            <div class="req-item">💬 <strong>Диалог:</strong> Кемінде 6-8 сөйлем</div>
+            <div class="req-item">🛠 <strong>Құрылымы:</strong> <span class="badge">1</span>Қаратпа, <span class="badge">1</span>Қыстырма, <span class="badge">1</span>Одағай</div>
+            <div class="req-item">✨ <strong>Мақсаты:</strong> Өмірлік тәрбие мен еңбек құндылығын түсіну.</div>
+        </div>
+    </div>
+
+    <div id="option2" class="task-content">
+        <div class="task-header">
+            <div class="illustration-icon">👬✨</div>
+            <div>
+                <h2>Екі достың сыры</h2>
+                <p>Тақырыбы: Арман мен жұлдыз</p>
+            </div>
+        </div>
+        <p><strong>Тапсырма сипаттамасы:</strong> Екі дос түнде жұлдызды аспанға қарап, болашақ армандары туралы сырласады. Олар арманға жету үшін тек еңбек қажет екенін талқылайды.</p>
+        
+        <div class="requirements">
+            <div class="req-item">💬 <strong>Диалог:</strong> Кемінде 6-8 сөйлем</div>
+            <div class="req-item">🛠 <strong>Құрылымы:</strong> <span class="badge">1</span>Қаратпа, <span class="badge">1</span>Қыстырма, <span class="badge">1</span>Одағай</div>
+            <div class="req-item">✨ <strong>Мақсаты:</strong> Арман мен еңбек арасындағы байланысты ашу.</div>
+        </div>
+    </div>
+
+    <div id="option3" class="task-content">
+        <div class="task-header">
+            <div class="illustration-icon">🔭🎓</div>
+            <div>
+                <h2>Ғалым мен шәкірт диалогы</h2>
+                <p>Тақырыбы: Ғылым және жұлдыздар</p>
+            </div>
+        </div>
+        <p><strong>Тапсырма сипаттамасы:</strong> Шәкірт ғалымнан жұлдыздардың құпиясын сұрайды. Ғалым білім мен ғылымға жету жолындағы қажырлы еңбектің маңызын түсіндіреді.</p>
+        
+        <div class="requirements">
+            <div class="req-item">💬 <strong>Диалог:</strong> Кемінде 6-8 сөйлем</div>
+            <div class="req-item">🛠 <strong>Құрылымы:</strong> <span class="badge">1</span>Қаратпа, <span class="badge">1</span>Қыстырма, <span class="badge">1</span>Одағай</div>
+            <div class="req-item">✨ <strong>Мақсаты:</strong> Ғылым, білім және еңбек бірлігін көрсету.</div>
+        </div>
+    </div>
+
+    <footer>
+        <p>💡 Нұсқау: Алдымен көмекші сөздерді еске түсіріп, содан кейін диалогты құрастырыңдар.</p>
+    </footer>
+</div>
+
+<script>
+    function showTask(tabId, btn) {
+        // Барлық мазмұнды жасыру
+        const contents = document.querySelectorAll('.task-content');
+        contents.forEach(content => content.classList.remove('active'));
+        
+        // Барлық батырмалардан актив стильді алып тастау
+        const buttons = document.querySelectorAll('.tab-btn');
+        buttons.forEach(button => button.classList.remove('active'));
+        
+        // Таңдалғанды көрсету
+        document.getElementById(tabId).classList.add('active');
+        btn.classList.add('active');
+    }
+</script>
+
+</body>
+</html>

@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="kk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Топтық жұмыс: Аспан денелері туралы аңыздар</title>
+    <style>
+        :root {
+            --dark-blue: #1a1a2e;
+            --star-gold: #f1c40f;
+            --white: #ffffff;
+            --gray: #f4f4f9;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--dark-blue);
+            color: #333;
+            margin: 0;
+            padding: 20px;
+            background-image: radial-gradient(white, rgba(255,255,255,.2) 2px, transparent 40px),
+                              radial-gradient(white, rgba(255,255,255,.15) 1px, transparent 30px);
+            background-size: 550px 550px, 350px 350px;
+            background-attachment: fixed;
+        }
+
+        header {
+            text-align: center;
+            color: var(--white);
+            margin-bottom: 40px;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            text-shadow: 2px 2px 10px rgba(255, 215, 0, 0.5);
+        }
+
+        .container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 20px;
+            max-width: 1500px;
+            margin: 0 auto;
+        }
+
+        .team-card {
+            background: var(--white);
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.3);
+            transition: transform 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            border-top: 5px solid var(--star-gold);
+        }
+
+        .team-card:hover {
+            transform: translateY(-10px);
+        }
+
+        .team-name {
+            font-size: 1.5rem;
+            color: #2c3e50;
+            margin-bottom: 15px;
+            text-align: center;
+            font-weight: bold;
+            border-bottom: 2px solid var(--gray);
+            padding-bottom: 10px;
+        }
+
+        .content {
+            line-height: 1.6;
+            font-size: 1.05rem;
+            text-align: justify;
+        }
+
+        .badge {
+            display: inline-block;
+            background: var(--dark-blue);
+            color: var(--star-gold);
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            margin-bottom: 10px;
+            font-weight: bold;
+        }
+
+        /* Әр топқа жеке түс (акцент) */
+        .temirkazyk { border-top-color: #f1c40f; }
+        .aikun { border-top-color: #e74c3c; }
+        .sholpan { border-top-color: #3498db; }
+
+        @media (max-width: 600px) {
+            h1 { font-size: 1.8rem; }
+            .container { grid-template-columns: 1fr; }
+        }
+        .back-btn {
+            position: fixed; top: 20px; left: 20px;
+            background-color: #6014ec; color: rgb(240, 239, 239);
+            border: none; padding: 10px 18px;
+            font-size: 14px; border-radius: 10px;
+            cursor: pointer; z-index: 150;
+        }
+        h4{
+            
+            background: var(--glass);
+            padding: 20px;
+            border-radius: 15px;
+            margin: 20px 0;
+            font-style: italic;
+            border-left: 5px solid var(--gold);
+            color: #e4f127;
+        }
+    </style>
+</head>
+<body>
+    <button class="back-btn" onclick="history.back()">⬅ Артқа қайту</button>
+
+    <header>
+        <h1>Топтық жұмыс: "Ең үздік аңызшылар"</h1>
+        <h4><i>Бірігіп еңбек еткеннің нәтижесі әрқашан жоғары</i></h4>
+        <p>Әр топ өз ертегісін оқып, мазмұнымен басқа топтармен бөліседі</p>
+    </header>
+
+    <div class="container">
+        <div class="team-card temirkazyk">
+            <div class="badge">1-топ</div>
+            <div class="team-name">Темірқазық</div>
+            <div class="content">
+                <p>Аспанның солтүстік жартысындағы жұлдыздардың тәуліктік көрінерлік қозғалысы Жетіқарақшы аңызына арқау болды. Темірқазық – қозғалмайтын полярлық жұлдыз. Құрамындағы жұлдыздардың кейбіреулері шұбатылған арқан тәрізді, ал екіншілері арқандалған атқа ұқсас. Олар Темірқазықты үнемі айнала қозғалады. Бұлардың сыртын ала, арқандалған аттарды торуылдап, Жетіқарақшы айналады.</p>
+                <p>Аңыз желісі бойынша Жетіқарақшы – қырық қарақшының барлаушысы. Олар Вега мен Капелла жұлдыздарындағы батырлардың аттарын (Ақбозат пен Көкбозат) қолға түсіріп алмақшы. Жетіқарақшының тобасы қырыққарақшы (Мицар) Үркердің қызы Үлпілдекті (Алькор) иемденіп алған. Үркер Жетіқарақшыдан үнемі қашып жүреді.</p>
+                <blockquote style="font-style: italic; color: #555; border-left: 3px solid #f1c40f; padding-left: 10px; margin-top: 15px;">
+    «Темірқазық аспанның тірегі болса, еңбек – өмірдің тірегі»
+</blockquote>
+            </div>
+        </div>
+
+        <div class="team-card aikun">
+            <div class="badge">2-топ</div>
+            <div class="team-name">Ай мен Күн</div>
+            <div class="content">
+                <p>Күн мен Ай аңызда егіз туған ғажайып сұлу қыздар екен. Әсіресе, Ай сұлулырақ болғандықтан, Күн қызғанып, оның бетін тырнап алса керек.</p>
+                <p>Сол себепті Ай Күннен шалғайда жүргенде, Күнді еркелетіп, толық Ай түрінде анық көрінсе, Күнге жақындағанда, тырнап ала ма деп бетін бүркеп жасырады. Бұл аңыз Айдың фазалары мен Күн мен Айдың аспандағы қозғалысын түсіндіреді.</p>
+                <blockquote style="font-style: italic; color: #555; border-left: 3px solid #f1c40f; padding-left: 10px; margin-top: 15px;">
+    «Күн мен Ай әлемді жарықтандыру үшін тынбай қызмет етеді. Сол сияқты адал еңбек те адамның ажарын ашады»
+</blockquote>
+            </div>
+        </div>
+
+        <div class="team-card sholpan">
+            <div class="badge">3-топ</div>
+            <div class="team-name">Шолпан жұлдызы</div>
+            <div class="content">
+                <p>Шолпан аңызда емші қыз болып айтылады әрі мейлінше сұлу. Ол бар ғұмырын ауру-сырқауларды емдеп, жазуға арнамақшы болады. Бірақ оның бұл ойы жүзеге аспай қалады: өзі сұлу, өзі ақылды емші қызға жігіттер бірінен соң бірі сөз айтып, ақыры соңы үлкен дау-жанжалға айналады.</p>
+                <p>Ел арасында іріткі туа бастайды. Мұның бәрі өзінің сұлулығы мен ақылдылығына байланысты болғанын сезген қыз елден алысқа кетіп, халыққа нұрын биіктен шашқысы келеді. Сөйтіп, таң қылаң бере ол аспанға ұшып шығып, таң жұлдызына айналады. Халық оны «Шолпан жұлдызы» деп атап кетеді.</p>
+                <blockquote style="font-style: italic; color: #555; border-left: 3px solid #f1c40f; padding-left: 10px; margin-top: 15px;">
+    «Шолпанның сұлулығы нұрында болса, адамның сұлулығы атқарған игі ісі мен еңбегінде»
+</blockquote>
+            </div>
+        </div>
+    </div>
+
+    <footer style="text-align: center; color: white; margin-top: 40px; font-size: 0.8rem; opacity: 0.7;">
+        &copy; Топтық жұмыс порталы - 2026
+    </footer>
+
+</body>
+</html>

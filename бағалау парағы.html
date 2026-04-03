@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="kk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Space Assessment System</title>
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
+    <style>
+        :root {
+            --space-bg: #050b18;
+            --nebula-purple: #6d28d9;
+            --star-gold: #fbbf24;
+            --cosmic-blue: #3b82f6;
+            --neon-cyan: #00f2ff;
+            --danger-red: #ef4444;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            background: var(--space-bg);
+            background-image: 
+                radial-gradient(white, rgba(255,255,255,.2) 2px, transparent 40px),
+                radial-gradient(white, rgba(255,255,255,.15) 1px, transparent 30px),
+                radial-gradient(circle at center, #1e1b4b 0%, #050b18 100%);
+            background-size: 550px 550px, 350px 350px, 100% 100%;
+            font-family: 'Segoe UI', Roboto, sans-serif;
+            color: white;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            padding-top: 50px;
+        }
+
+        .main-container {
+            width: 95%;
+            max-width: 1400px;
+            z-index: 1;
+        }
+
+        .author {
+            position: fixed;
+            top: 10px;
+            right: 15px;
+            font-size: 0.7rem;
+            color: var(--neon-cyan);
+            letter-spacing: 2px;
+            text-shadow: 0 0 5px var(--neon-cyan);
+        }
+
+        .header-section {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .neon-title {
+            font-size: 3rem;
+            font-weight: 900;
+            margin: 0;
+            background: linear-gradient(to right, #fff, var(--neon-cyan), var(--cosmic-blue));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-transform: uppercase;
+        }
+
+        .btn-group {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .btn {
+            padding: 12px 25px;
+            font-weight: bold;
+            cursor: pointer;
+            border-radius: 50px;
+            transition: 0.4s;
+            text-transform: uppercase;
+            font-size: 0.8rem;
+        }
+
+        .download-btn {
+            background: rgba(0, 242, 255, 0.1);
+            color: var(--neon-cyan);
+            border: 2px solid var(--neon-cyan);
+        }
+
+        .download-btn:hover {
+            background: var(--neon-cyan);
+            color: #000;
+            box-shadow: 0 0 20px var(--neon-cyan);
+        }
+
+        .clear-btn {
+            background: rgba(239, 68, 68, 0.1);
+            color: var(--danger-red);
+            border: 2px solid var(--danger-red);
+        }
+
+        .clear-btn:hover {
+            background: var(--danger-red);
+            color: #fff;
+            box-shadow: 0 0 20px var(--danger-red);
+        }
+
+        .students-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+            gap: 20px;
+            padding-bottom: 50px;
+        }
+
+        .student-card {
+            background: rgba(22, 30, 45, 0.8);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(0, 242, 255, 0.2);
+            padding: 20px 15px 15px 15px;
+            border-radius: 15px;
+            text-align: center;
+            position: relative;
+            transition: 0.3s;
+        }
+
+        /* Жеке өшіру батырмасы */
+        .delete-card {
+            position: absolute;
+            top: 8px;
+            right: 10px;
+            color: rgba(255,255,255,0.3);
+            cursor: pointer;
+            font-size: 14px;
+            transition: 0.3s;
+        }
+
+        .delete-card:hover {
+            color: var(--danger-red);
+        }
+
+        .student-name {
+            width: 100%;
+            background: rgba(0, 0, 0, 0.4);
+            border: 1px solid #334155;
+            color: #fff;
+            padding: 8px;
+            margin-bottom: 15px;
+            text-align: center;
+            border-radius: 8px;
+            outline: none;
+            box-sizing: border-box;
+        }
+
+        .rating-box {
+            display: flex;
+            justify-content: center;
+            gap: 4px;
+            margin-bottom: 10px;
+        }
+
+        .star {
+            font-size: 20px;
+            cursor: pointer;
+            color: rgba(255,255,255,0.1);
+        }
+
+        .star.active {
+            color: var(--star-gold);
+            text-shadow: 0 0 8px var(--star-gold);
+        }
+
+        .status-msg {
+            font-size: 0.65rem;
+            font-weight: bold;
+            color: #94a3b8;
+            text-transform: uppercase;
+        }
+        .back-btn {
+            position: fixed; top: 20px; left: 20px;
+            background-color: #6014ec; color: rgb(240, 239, 239);
+            border: none; padding: 10px 18px;
+            font-size: 14px; border-radius: 10px;
+            cursor: pointer; z-index: 150;
+        }
+        h5 {
+            
+            margin: 0;
+            background: linear-gradient(to right, #fff, var(--danger-red), var(--star-gold));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-transform: uppercase; 
+        }
+    </style>
+</head>
+<body>
+    <button class="back-btn" onclick="history.back()">⬅ Артқа қайту</button>
+
+    <div class="author">ӘЗІРЛЕУШІ: БИЖАНОВА Ж.А.</div>
+
+    <div class="main-container">
+        <div class="header-section">
+            <h1 class="neon-title">БАҒАЛАУ ПАРАҒЫ</h1>
+            <h5><i>Білім – көктегі жұлдыз, еңбек – оған жеткізер жалғыз баспалдақ</i></h5>
+            <div class="btn-group">
+                <button class="btn download-btn" onclick="downloadExcel()">📊 ЕСЕПТІ САҚТАУ</button>
+                <button class="btn clear-btn" onclick="resetAll()">🗑 ТІЗІМДІ ТАЗАРТУ</button>
+            </div>
+        </div>
+        <div class="students-grid" id="grid"></div>
+    </div>
+
+    <script>
+        const grid = document.getElementById('grid');
+        let studentData = [];
+
+        function loadData() {
+            const savedData = localStorage.getItem('geoSmartDataV2');
+            if (savedData) {
+                studentData = JSON.parse(savedData);
+            } else {
+                initEmptyData();
+            }
+            renderGrid();
+        }
+
+        function initEmptyData() {
+            studentData = Array(25).fill(0).map((_, i) => ({ id: i, name: '', score: 0 }));
+        }
+
+        function saveData() {
+            localStorage.setItem('geoSmartDataV2', JSON.stringify(studentData));
+        }
+
+        function renderGrid() {
+            grid.innerHTML = '';
+            studentData.forEach((s, i) => {
+                const card = document.createElement('div');
+                card.className = 'student-card';
+                
+                let starsHTML = '';
+                for(let j = 1; j <= 10; j++) {
+                    starsHTML += `<span class="star ${j <= s.score ? 'active' : ''}" onclick="rate(${i}, ${j})">★</span>`;
+                }
+
+                card.innerHTML = `
+                    <span class="delete-card" onclick="clearStudent(${i})">✕</span>
+                    <input type="text" class="student-name" placeholder="ҒАРЫШКЕР №${i+1}" value="${s.name}" oninput="updateName(${i}, this.value)">
+                    <div class="rating-box">${starsHTML}</div>
+                    <div class="status-msg" id="msg-${i}">${getStatusText(s.score)}</div>
+                `;
+                grid.appendChild(card);
+            });
+        }
+
+        function updateName(id, val) {
+            studentData[id].name = val;
+            saveData();
+        }
+
+        // Бір оқушыны ғана тазарту
+        function clearStudent(id) {
+            if(confirm("Оқушы мәліметтерін өшіруді растайсыз ба?")) {
+                studentData[id].name = '';
+                studentData[id].score = 0;
+                saveData();
+                renderGrid();
+            }
+        }
+
+        // Бүкіл тізімді өшіру
+        function resetAll() {
+            if(confirm("БАРЛЫҚ деректерді толықтай өшіруді растайсыз ба?")) {
+                initEmptyData();
+                saveData();
+                renderGrid();
+            }
+        }
+
+        function getStatusText(score) {
+            if (score === 0) return "КҮТУДЕ...";
+            if (score <= 5) return "ЖЕРДЕ (ТӨМЕН)";
+            if (score <= 8) return "ОРБИТАДА (ОРТА)";
+            return "ЖҰЛДЫЗ (ЖОҒАРЫ)";
+        }
+
+        function rate(studentId, score) {
+            studentData[studentId].score = score;
+            saveData();
+            if (score >= 9) {
+                confetti({
+                    particleCount: 80,
+                    spread: 60,
+                    origin: { y: 0.7 },
+                    colors: ['#00f2ff', '#fbbf24']
+                });
+            }
+            renderGrid();
+        }
+
+        function downloadExcel() {
+            let csvContent = "\uFEFFОқушы;Балл;Дәреже\n";
+            studentData.forEach((s, index) => {
+                let name = s.name || `${index + 1}-оқушы`;
+                csvContent += `${name};${s.score};${getStatusText(s.score)}\n`;
+            });
+            const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+            const link = document.createElement("a");
+            link.href = URL.createObjectURL(blob);
+            link.download = "Space_Report.csv";
+            link.click();
+        }
+
+        loadData();
+    </script>
+</body>
+</html>

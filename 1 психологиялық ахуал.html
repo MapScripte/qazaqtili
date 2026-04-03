@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="kk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Сынып Жұлдызы - Белсенді Ахуал</title>
+    <style>
+        :root {
+            --gold: #ffdf00;
+            --sky-dark: #02040a;
+            --accent: #00eaff;
+            --action-color: #ff7eb3; /* Қимыл-іс-әрекет түсі */
+        }
+        body, html {
+            margin: 0; padding: 0;
+            width: 100%; height: 100%;
+            overflow: hidden;
+            background: var(--sky-dark);
+            font-family: 'Segoe UI', 'Roboto', sans-serif;
+            color: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        #universe {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            z-index: -1;
+            background: radial-gradient(circle at center, #0f172a 0%, #01030a 100%);
+        }
+        .star {
+            position: absolute;
+            background: white;
+            border-radius: 50%;
+            opacity: 0.1;
+            animation: twinkle var(--duration) infinite ease-in-out;
+        }
+        @keyframes twinkle {
+            0%, 100% { opacity: 0.2; transform: scale(1); }
+            50% { opacity: 1; transform: scale(1.3); box-shadow: 0 0 10px white; }
+        }
+        .content-core {
+            z-index: 10;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(25px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 40px;
+            padding: 40px;
+            width: 90%;
+            max-width: 850px;
+            box-shadow: 0 0 80px rgba(0, 0, 0, 0.5);
+        }
+        h1 {
+            font-size: 2.5rem;
+            color: var(--gold);
+            margin: 0;
+            text-shadow: 0 0 20px rgba(255, 223, 0, 0.4);
+            text-transform: uppercase;
+        }
+        .subtitle {
+            font-size: 1.1rem;
+            margin: 10px 0;
+            color: #a5b4fc;
+        }
+        .master-star {
+            font-size: 9rem;
+            cursor: pointer;
+            filter: drop-shadow(0 0 30px var(--gold));
+            transition: transform 0.2s;
+            animation: float 4s infinite ease-in-out;
+            user-select: none;
+            margin: 15px 0;
+        }
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-15px); }
+        }
+        .master-star:active { transform: scale(0.85); }
+        
+        #main-message {
+            min-height: 200px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            margin: 20px 0;
+            transition: 0.5s;
+        }
+        .wish-text {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--accent);
+            text-shadow: 0 0 15px rgba(0, 234, 255, 0.4);
+            margin-bottom: 15px;
+        }
+        .action-text {
+            font-size: 1.4rem;
+            font-style: italic;
+            color: var(--action-color);
+            background: rgba(255, 126, 179, 0.1);
+            padding: 10px 20px;
+            border-radius: 15px;
+            border-left: 4px solid var(--action-color);
+        }
+
+        .footer-quote {
+            font-size: 1.1rem;
+            color: var(--gold);
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            padding-top: 20px;
+            width: 100%;
+        }
+        #start-screen {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: #01030a; z-index: 100;
+            display: flex; justify-content: center; align-items: center;
+        }
+        .btn-launch {
+            padding: 18px 50px;
+            background: var(--gold);
+            border: none; border-radius: 50px;
+            color: black; font-size: 1.5rem; font-weight: bold;
+            cursor: pointer; box-shadow: 0 0 40px var(--gold);
+        }
+        .back-btn {
+            position: fixed; top: 20px; left: 20px;
+            background-color: #ece914; color: rgb(8, 8, 8);
+            border: none; padding: 10px 18px;
+            font-size: 14px; border-radius: 10px;
+            cursor: pointer; z-index: 150;
+        }
+    </style>
+</head>
+<body>
+    <button class="back-btn" onclick="history.back()">⬅ Артқа қайту</button>
+    <div id="start-screen"><button class="btn-launch" onclick="launch()">БАСТАУ ✨</button></div>
+    <div id="universe"></div>
+
+    <div class="content-core">
+        <h1>Сынып Жұлдызы</h1>
+        <div class="subtitle">Жұлдызды басып, тапсырманы орында:</div>
+        <div class="master-star" onclick="generateCommonWish()">⭐</div>
+        
+        <div id="main-message">
+            <div class="wish-text">Дайынсыңдар ма?</div>
+        </div>
+
+        <div class="footer-quote">Әр адам – жұлдыз, бірақ жарқырау үшін еңбек керек!</div>
+    </div>
+
+<script>
+    const universe = document.getElementById('universe');
+    for (let i = 0; i < 400; i++) {
+        const s = document.createElement('div');
+        s.className = 'star';
+        const size = (Math.random() * 2 + 1) + 'px';
+        s.style.width = size; s.style.height = size;
+        s.style.top = Math.random() * 100 + '%';
+        s.style.left = Math.random() * 100 + '%';
+        s.style.setProperty('--duration', (Math.random() * 3 + 2) + 's');
+        universe.appendChild(s);
+    }
+
+    // МӘТІН ЖӘНЕ ҚИМЫЛ-ІС-ӘРЕКЕТТЕР
+    const activities = [
+        { text: "Бір-бірімізге қарап күлімсірейміз!", action: "😊 (Көршіңе жылы шырай таныт)" },
+        { text: "Бір-бірімізге алғыс айтамыз!", action: "🙏 (Рақмет айтып, басыңды иесің)" },
+        { text: "Бір-бірімізді құшақтаймыз!", action: "🤗 (Жан-жағыңдағы достарыңды құшақта)" },
+        { text: "«Мен еңбекқормын, менің қолымнан бәрі келеді!»", action: "💪 (Қолымызды жоғары көтереміз)" },
+        { text: "«Мен үшін әр күн – еңбек пен жетістікке толы!»", action: "✨ (Дауыстап, нық сеніммен айтамыз)" },
+        { text: "«Мен қауіпсіз ортадамын, еңбекті сүйемін және сыныбымды жақсы көремін!»", action: "❤️ (Қолымызбен жүрек белгісін жасаймыз)" }
+    ];
+
+    let pool = [...activities];
+    let audioCtx = null;
+
+    function launch() {
+        document.getElementById('start-screen').style.display = 'none';
+        audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    }
+
+    function generateCommonWish() {
+        if (!audioCtx) return;
+        const container = document.getElementById('main-message');
+        
+        if (pool.length === 0) pool = [...activities];
+
+        const index = Math.floor(Math.random() * pool.length);
+        const item = pool.splice(index, 1)[0];
+
+        container.style.opacity = 0;
+        
+        setTimeout(() => {
+            container.innerHTML = `
+                <div class="wish-text">${item.text}</div>
+                <div class="action-text">${item.action}</div>
+            `;
+            container.style.opacity = 1;
+        }, 200);
+
+        playCrystalSound();
+    }
+
+    function playCrystalSound() {
+        const o = audioCtx.createOscillator();
+        const g = audioCtx.createGain();
+        o.type = 'sine';
+        o.frequency.setValueAtTime(800, audioCtx.currentTime);
+        o.frequency.exponentialRampToValueAtTime(400, audioCtx.currentTime + 0.3);
+        o.connect(g); g.connect(audioCtx.destination);
+        g.gain.setValueAtTime(0.1, audioCtx.currentTime);
+        g.gain.linearRampToValueAtTime(0, audioCtx.currentTime + 0.3);
+        o.start(); o.stop(audioCtx.currentTime + 0.3);
+    }
+</script>
+</body>
+</html>

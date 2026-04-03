@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="kk">
+<head>
+    <meta charset="UTF-8">
+    <title>Сандар Аңызы: Білім Шыңы</title>
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            overflow: hidden; 
+            background: #05070a;
+            color: #fff;
+            font-family: 'Georgia', serif;
+        }
+
+        .space {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at center, #1b2735 0%, #090a0f 100%);
+            z-index: -1;
+        }
+
+        /* Дәйексөз стилі */
+        .quote-section {
+            text-align: center;
+            max-width: 800px;
+            margin-bottom: 30px;
+            padding: 15px;
+            border-top: 1px solid rgba(241, 196, 15, 0.2);
+            border-bottom: 1px solid rgba(241, 196, 15, 0.2);
+            position: relative;
+        }
+
+        .quote-text {
+            font-style: italic;
+            font-size: 1.1rem;
+            color: #bdc3c7;
+            line-height: 1.6;
+            letter-spacing: 1px;
+        }
+
+        .quote-author {
+            display: block;
+            margin-top: 10px;
+            color: #f1c40f;
+            font-weight: bold;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+        }
+
+        .container {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+
+        h1 {
+            color: #f1c40f;
+            text-shadow: 0 0 20px rgba(241, 196, 15, 0.6);
+            margin: 0 0 20px 0;
+            font-size: 2rem;
+            text-transform: uppercase;
+            letter-spacing: 5px;
+        }
+
+        .quiz-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 12px;
+            width: 90%;
+            max-width: 850px;
+        }
+
+        .card {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(241, 196, 15, 0.3);
+            padding: 12px 25px;
+            border-radius: 12px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            backdrop-filter: blur(5px);
+            transition: 0.3s;
+        }
+
+        .card:hover {
+            border-color: #f1c40f;
+            background: rgba(241, 196, 15, 0.05);
+        }
+
+        .question-text {
+            font-size: 1.1rem;
+            color: #e0e0e0;
+            flex: 1;
+        }
+
+        .answer-btn {
+            background: transparent;
+            border: 1px solid #f1c40f;
+            color: #f1c40f;
+            padding: 8px 18px;
+            cursor: pointer;
+            border-radius: 20px;
+            transition: all 0.3s;
+            margin-left: 20px;
+            white-space: nowrap;
+        }
+
+        .answer-btn:hover {
+            background: #f1c40f;
+            color: #000;
+            box-shadow: 0 0 15px #f1c40f;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 10;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.85);
+        }
+
+        .modal-content {
+            background: linear-gradient(135deg, #0f0c29 0%, #302b63 50%, #24243e 100%);
+            margin: 15% auto;
+            padding: 40px;
+            border: 2px solid #f1c40f;
+            width: 40%;
+            border-radius: 20px;
+            text-align: center;
+            box-shadow: 0 0 40px rgba(241, 196, 15, 0.5);
+        }
+
+        #answerText {
+            font-size: 1.4rem;
+            color: #fff;
+            line-height: 1.6;
+        }
+
+        .close {
+            color: #f1c40f;
+            float: right;
+            font-size: 30px;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: -20px;
+        }
+        /* Галактикалық фон */
+        .galaxy-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #020107 url('https://images.unsplash.com/photo-1464802686167-b939a67e0b24?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80') no-repeat center center;
+            background-size: cover;
+            z-index: -1;
+            filter: brightness(0.7);
+        }
+
+        /* Жұлдыздардың жыпылықтауы (Overlay) */
+        .stars-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: transparent;
+            background-image: 
+                radial-gradient(1px 1px at 20px 30px, #fff, rgba(0,0,0,0)),
+                radial-gradient(1px 1px at 40px 70px, #fff, rgba(0,0,0,0)),
+                radial-gradient(2px 2px at 50px 160px, #fff, rgba(0,0,0,0)),
+                radial-gradient(2px 2px at 90px 40px, #fff, rgba(0,0,0,0));
+            background-repeat: repeat;
+            background-size: 200px 200px;
+            animation: twinkle 4s infinite linear;
+            z-index: -1;
+            opacity: 0.5;
+        }
+         @keyframes twinkle {
+            0% { opacity: 0.3; }
+            50% { opacity: 0.8; }
+            100% { opacity: 0.3; }
+        }
+        .back-btn {
+            position: fixed; top: 20px; left: 20px;
+            background-color: #f1c40f; color: rgb(12, 12, 12);
+            border: none; padding: 10px 18px;
+            font-size: 14px; border-radius: 10px;
+            cursor: pointer; z-index: 150;
+        }
+
+    </style>
+</head>
+<body>
+<button class="back-btn" onclick="history.back()">⬅ Артқа қайту</button>
+<div class="galaxy-bg"></div>
+<div class="stars-overlay"></div>
+
+
+<div class="container">
+    <div class="quote-section">
+        <p class="quote-text">«Білмегенді білсем деген — талап, білгенін бекітсем деген — мұрат». </p>
+        <span class="quote-author">Шәкәрім Құдайбердіұлы</span>
+    </div>
+
+    <h1>Бекіту сұрақтары</h1>
+
+    <div class="quiz-grid">
+        <div class="card">
+            <div class="question-text">1. Сан есімнің заттануы дегеніміз не?</div>
+            <button class="answer-btn" onclick="showAnswer('Сан есімнің сөйлемде зат есімнің қызметін атқарып, кім? не? сұрақтарына жауап беруі.')">Сырды ашу</button>
+        </div>
+
+        <div class="card">
+            <div class="question-text">2. «Жиырмасыншы оқушы жауап берді» сөйлеміндегі сан есім түрі?</div>
+            <button class="answer-btn" onclick="showAnswer('Бұл — Реттік сан есім. Заттың санау ретін білдіріп тұр.')">Сырды ашу</button>
+        </div>
+
+        <div class="card">
+            <div class="question-text">3. «Төрт кітап үстелде жатыр» сөйлемінде сан есім затталған ба?</div>
+            <button class="answer-btn" onclick="showAnswer('Жоқ, затталмаған. Себебі ол тікелей «кітап» сөзін анықтап тұр.')">Сырды ашу</button>
+        </div>
+
+        <div class="card">
+            <div class="question-text">4. Есептік және реттік сан есімнің басты айырмашылығы?</div>
+            <button class="answer-btn" onclick="showAnswer('Есептік — заттың нақты санын (қанша?), реттік — кезегін (нешінші?) көрсетеді.')">Сырды ашу</button>
+        </div>
+
+        <div class="card">
+            <div class="question-text">5. Болжалдық сан есімге мысал келтір:</div>
+            <button class="answer-btn" onclick="showAnswer('Жұмбақ жұлдыздар саны — жүздеген, мыңдаған...')">Сырды ашу</button>
+        </div>
+    </div>
+</div>
+
+<div id="myModal" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="closeModal()">&times;</span>
+        <p id="answerText"></p>
+    </div>
+</div>
+
+<script>
+    function showAnswer(text) {
+        document.getElementById('answerText').innerText = text;
+        document.getElementById('myModal').style.display = "block";
+    }
+
+    function closeModal() {
+        document.getElementById('myModal').style.display = "none";
+    }
+
+    window.onclick = function(event) {
+        if (event.target == document.getElementById('myModal')) {
+            closeModal();
+        }
+    }
+</script>
+
+</body>
+</html>
