@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="kk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Сан есім - Сергіту Сәті</title>
+    <style>
+        :root {
+            --bg-color: #f0f2f5;
+            --primary-color: #2d3436;
+            --accent-color: #0984e3;
+            --success: #00b894;
+            --error: #d63031;
+        }
+
+        body {
+            font-family: 'Arial Rounded MT Bold', 'Helvetica', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--primary-color);
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            overflow: hidden;
+            text-align: center;
+        }
+
+        /* Ойын контейнері */
+        #game-container {
+            width: 90%;
+            max-width: 900px;
+            background: white;
+            padding: 40px;
+            border-radius: 30px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            position: relative;
+        }
+
+        h1 { font-size: 2.5rem; color: var(--accent-color); margin-bottom: 10px; }
+        .instruction { font-size: 1.2rem; color: #636e72; margin-bottom: 30px; }
+
+        /* Үлкен экрандағы сөздер */
+        #display-word {
+            font-size: 6rem;
+            font-weight: bold;
+            margin: 40px 0;
+            min-height: 150px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: transform 0.2s;
+        }
+
+        /* Көмекші қимылдар кестесі */
+        .controls-hint {
+            display: flex;
+            justify-content: space-around;
+            margin-top: 30px;
+            padding: 20px;
+            background: #f1f2f6;
+            border-radius: 15px;
+        }
+
+        .hint-item { font-size: 1rem; font-weight: bold; }
+        .hint-item span { display: block; font-size: 2rem; }
+
+        /* Батырмалар */
+        .btn {
+            background: var(--accent-color);
+            color: white;
+            border: none;
+            padding: 15px 40px;
+            font-size: 1.5rem;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .btn:hover { transform: scale(1.05); background: #0773c5; }
+
+        /* Таймер сызығы */
+        #timer-bar {
+            width: 100%;
+            height: 10px;
+            background: #eee;
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            border-radius: 0 0 30px 30px;
+        }
+
+        #timer-fill {
+            height: 100%;
+            width: 100%;
+            background: var(--success);
+            transition: width linear;
+        }
+
+        /* Анимациялар */
+        .bounce { animation: bounce 0.5s infinite alternate; }
+        @keyframes bounce { from { transform: translateY(0); } to { transform: translateY(-10px); } }
+
+        .shake { animation: shake 0.5s; }
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-10px); }
+            75% { transform: translateX(10px); }
+        }
+
+        #feedback { font-size: 1.5rem; font-weight: bold; margin-top: 20px; min-height: 40px; }
+    </style>
+</head>
+<body>
+
+    <div id="game-container">
+        <div id="start-screen">
+            <h1>🚀 Сан есімдер шеруі!</h1>
+            <p class="instruction">Дайынсың ба? Сөздер өте жылдам өтеді!</p>
+            <button class="btn" onclick="startGame()">Бастау!</button>
+        </div>
+
+        <div id="quiz-screen" style="display:none;">
+            <div id="round-title" style="color: var(--accent-color); font-weight: bold;">FLASH ROUND</div>
+            <div id="display-word">...</div>
+            <div id="feedback"></div>
+            
+            <div class="controls-hint">
+                <div class="hint-item"><span>🙌</span>Есептік болса:<br>Екі қол жоғары</div>
+                <div class="hint-item"><span>🙋‍♂️</span>Реттік болса:<br>Оң қол жоғары</div>
+                <div class="hint-item"><span>👏</span>Дұрыс болса:<br>Қол шапалақта</div>
+            </div>
+
+            <div id="timer-bar"><div id="timer-fill"></div></div>
+        </div>
+
+        <div id="result-screen" style="display:none;">
+            <h1>Бір, екі, үш - миың оянды ма? 🚀</h1>
+            <p id="final-msg" style="font-size: 1.5rem;"></p>
+            <button class="btn" onclick="location.reload()">Қайталау</button>
+        </div>
+    </div>
+
+    <script>
+        const questions = [
+            { type: 'flash', word: 'Бес', ans: 'Есептік' },
+            { type: 'flash', word: 'Оныншы', ans: 'Реттік' },
+            { type: 'flash', word: 'Алтыу', ans: 'Жинақтық' },
+            { type: 'tf', word: 'Екінші - есептік сан есім?', ans: 'Бұрыс 😆' },
+            { type: 'tf', word: 'Бесеу - заттанған сан есім?', ans: 'Дұрыс ✅' },
+            { type: 'flash', word: 'Жиырма', ans: 'Есептік' },
+            { type: 'flash', word: 'Жүз бірінші', ans: 'Реттік' },
+            { type: 'tf', word: 'Сан есімдер саған күледі 😆', ans: 'Күлімде!' }
+        ];
+
+        let currentIdx = 0;
+        const displayWord = document.getElementById('display-word');
+        const feedback = document.getElementById('feedback');
+        const timerFill = document.getElementById('timer-fill');
+
+        function startGame() {
+            document.getElementById('start-screen').style.display = 'none';
+            document.getElementById('quiz-screen').style.display = 'block';
+            nextQuestion();
+        }
+
+        function nextQuestion() {
+            if (currentIdx >= questions.length) {
+                showResults();
+                return;
+            }
+
+            let q = questions[currentIdx];
+            displayWord.innerText = q.word;
+            displayWord.classList.remove('shake');
+            feedback.innerText = "";
+            
+            // Раунд атауы
+            document.getElementById('round-title').innerText = q.type === 'flash' ? "ЖЫЛДАМДЫҚ РАУНДЫ ⚡" : "ДҰРЫС ПА, БҰРЫС ПА? 🤔";
+
+            // Таймер анимациясы (4 секунд)
+            timerFill.style.transition = 'none';
+            timerFill.style.width = '100%';
+            
+            setTimeout(() => {
+                timerFill.style.transition = 'width 4s linear';
+                timerFill.style.width = '0%';
+            }, 50);
+
+            // 4 секундтан кейін жауапты көрсету
+            setTimeout(() => {
+                displayWord.classList.add('shake');
+                feedback.innerText = "Жауап: " + q.ans;
+                
+                // Тағы 2 секундтан кейін келесі сұрақ
+                setTimeout(() => {
+                    currentIdx++;
+                    nextQuestion();
+                }, 2500);
+            }, 4000);
+        }
+
+        function showResults() {
+            document.getElementById('quiz-screen').style.display = 'none';
+            document.getElementById('result-screen').style.display = 'block';
+            document.getElementById('final-msg').innerText = "Керемет! Сендердің білімдерің " + (Math.floor(Math.random() * 20) + 80) + "%-ға артты!";
+        }
+    </script>
+</body>
+</html>
